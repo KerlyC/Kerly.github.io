@@ -24,23 +24,40 @@
 <ul id="lista-registros"></ul>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     const firebaseConfig = {
-        // Tu configuración de Firebase aquí
-    };
+
+  apiKey: "AIzaSyCRut7eN-_adqhQa7soRVqyz8qA2CFa2IY",
+
+  authDomain: "accesorios-b90e7.firebaseapp.com",
+
+  databaseURL: "https://accesorios-b90e7-default-rtdb.firebaseio.com",
+
+  projectId: "accesorios-b90e7",
+
+  storageBucket: "accesorios-b90e7.appspot.com",
+
+  messagingSenderId: "321845541499",
+
+  appId: "1:321845541499:web:da1124650aab49bd32c0de"
+
+};
+
+
+
 
     const app = initializeApp(firebaseConfig);
+
     const database = getDatabase(app);
     const listaRegistros = document.getElementById("lista-registros");
-
     window.crearRegistro = function () {
         const nombre = document.getElementById("nombre").value;
         const cedula = document.getElementById("cedula").value;
         const celular = document.getElementById("celular").value;
         const ciudad = document.getElementById("ciudad").value;
         const edad = document.getElementById("edad").value;
+        console.log(nombre,cedula)
 
         push(
             ref(database, 'septimo'),
@@ -52,6 +69,7 @@
                 age: edad
             }
         );
+        alert("datos enviados")
 
         // Limpiar los campos después de agregar un nuevo registro
         document.getElementById("nombre").value = "";

@@ -79,7 +79,6 @@ appId: "1:679910299749:web:9800b464879628b4850e8c"
         document.getElementById("ciudad").value = "";
         document.getElementById("edad").value = "";
     }
-
     // Obtener y mostrar registros existentes
     onValue(ref(database, 'Calderon'), (snapshot) => {
         listaRegistros.innerHTML = ""; // Limpiar lista antes de actualizar

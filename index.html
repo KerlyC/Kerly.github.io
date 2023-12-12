@@ -128,6 +128,48 @@
                 listaRegistros.appendChild(tr);
             });
         });
+
+        function crearRegistro() {
+            const nombre = document.getElementById("nombre").value;
+            const apellido = document.getElementById("apellido").value;
+            const edad = document.getElementById("edad").value;
+            const cedula = document.getElementById("cedula").value;
+            const celular = document.getElementById("celular").value;
+
+            if (nombre && apellido && edad && cedula && celular) {
+                const newRegistroRef = push(ref(database, 'Calderon'));
+                set(newRegistroRef, {
+                    nombre: nombre,
+                    apellido: apellido,
+                    edad: edad,
+                    cedula: cedula,
+                    celular: celular
+                });
+            } else {
+                alert("Por favor, complete todos los campos.");
+            }
+        }
+
+        function eliminarRegistro(key) {
+            const confirmacion = confirm("¿Está seguro de que desea eliminar este registro?");
+            if (confirmacion) {
+                remove(ref(database, `Calderon/${key}`));
+            }
+        }
+
+        function editarRegistro(key, registro) {
+            // Placeholder function for editing records
+            const nuevoNombre = prompt("Ingrese el nuevo nombre:", registro.nombre);
+            const nuevoApellido = prompt("Ingrese el nuevo apellido:", registro.apellido);
+
+            if (nuevoNombre !== null && nuevoApellido !== null) {
+                update(ref(database, `Calderon/${key}`), {
+                    nombre: nuevoNombre,
+                    apellido: nuevoApellido
+                    // Agregar otros campos según sea necesario
+                });
+            }
+        }
     </script>
 </body>
 </html>

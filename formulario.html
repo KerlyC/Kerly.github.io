@@ -82,7 +82,7 @@
     }
 
     // Obtener y mostrar registros existentes
-    onValue(ref(database, 'septimo'), (snapshot) => {
+    onValue(ref(database, 'Calderon'), (snapshot) => {
         listaRegistros.innerHTML = ""; // Limpiar lista antes de actualizar
 
         snapshot.forEach((childSnapshot) => {
@@ -105,7 +105,7 @@
     });
 
     window.eliminarRegistro = function (key) {
-        remove(ref(database, `septimo/${key}`));
+        remove(ref(database, `Calderon/${key}`));
     }
 
     window.editarRegistro = function (key, registro) {
@@ -115,7 +115,7 @@
         const nuevaCiudad = prompt("Nueva ciudad:", registro.ciudad);
         const nuevaEdad = prompt("Nueva edad:", registro.age);
 
-        update(ref(database, `septimo/${key}`), {
+        update(ref(database, `Calderon/${key}`), {
             name: nuevoNombre,
             cedula: nuevaCedula,
             celular: nuevoCelular,

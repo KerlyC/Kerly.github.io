@@ -111,6 +111,13 @@
 
                 // Añadir celda de acciones con botones de eliminar y editar
                 const tdAcciones = document.createElement("td");
+                const btnCrear = document.createElement("button");
+                btnEliminar.textContent = "Crear";
+                btnEliminar.className = "btn btn-danger";
+                btnEliminar.onclick = () => crearRegistro(key);
+                tdAcciones.appendChild(btnCrear);
+
+                const tdAcciones = document.createElement("td");
                 const btnEliminar = document.createElement("button");
                 btnEliminar.textContent = "Eliminar";
                 btnEliminar.className = "btn btn-danger";

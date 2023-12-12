@@ -4,124 +4,130 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario con Firebase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </head>
 <body>
+    <div class="container">
+        <h1 class="text-center">DATOS PERSONALES</h1>
+        <div class="card shadow w-100 p-3">
+            <form id="crud-form" class="mb-3">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre">
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" class="form-control" id="apellido">
+                </div>
+                <div class="form-group">
+                    <label for="edad">Edad:</label>
+                    <input type="number" class="form-control" id="edad">
+                </div>
+                <div class="form-group">
+                    <label for="cedula">Cédula:</label>
+                    <input type="text" class="form-control" id="cedula">
+                </div>
+                <div class="form-group">
+                    <label for="celular">Celular:</label>
+                    <input type="text" class="form-control" id="celular">
+                </div>
+                <button type="button" class="btn btn-primary mt-3 mb-3" onclick="crearRegistro()">Crear</button>
+            </form>
+        </div>
 
-<form id="crud-form">
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre">
-    <label for="cedula">Cédula:</label>
-    <input type="text" id="cedula">
-    <label for="celular">Celular:</label>
-    <input type="text" id="celular">
-    <label for="ciudad">Ciudad:</label>
-    <input type="text" id="ciudad">
-    <label for="edad">Edad:</label>
-    <input type="number" id="edad">
-    <button type="button" onclick="crearRegistro()">Crear</button>
-</form>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Edad</th>
+                    <th>Cédula</th>
+                    <th>Celular</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="lista-registros"></tbody>
+        </table>
+    </div>
 
-<ul id="lista-registros"></ul>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
     const firebaseConfig = {
-        const firebaseConfig = {
 
-apiKey: "AIzaSyBMJsVpnbOwVOiVNbTZScZdet9qlGigDL0",
+      apiKey: "AIzaSyBMJsVpnbOwVOiVNbTZScZdet9qlGigDL0",
 
-authDomain: "conexion-8ec0d.firebaseapp.com",
+      authDomain: "conexion-8ec0d.firebaseapp.com",
 
-databaseURL: "https://conexion-8ec0d-default-rtdb.firebaseio.com",
+      databaseURL: "https://conexion-8ec0d-default-rtdb.firebaseio.com",
 
-projectId: "conexion-8ec0d",
+      projectId: "conexion-8ec0d",
 
-storageBucket: "conexion-8ec0d.appspot.com",
+      storageBucket: "conexion-8ec0d.appspot.com",
 
-messagingSenderId: "679910299749",
+      messagingSenderId: "679910299749",
 
-appId: "1:679910299749:web:9800b464879628b4850e8c"
+      appId: "1:679910299749:web:9800b464879628b4850e8c"
 
-};
+    };
 
 
 
 
     const app = initializeApp(firebaseConfig);
-
     const database = getDatabase(app);
-    const listaRegistros = document.getElementById("lista-registros");
-    window.crearRegistro = function () {
-        const nombre = document.getElementById("nombre").value;
-        const cedula = document.getElementById("cedula").value;
-        const celular = document.getElementById("celular").value;
-        const ciudad = document.getElementById("ciudad").value;
-        const edad = document.getElementById("edad").value;
-        console.log(nombre,cedula)
 
-        push(
-            ref(database, 'septimo'),
-            {
-                name: nombre,
-                cedula: cedula,
-                celular: celular,
-                ciudad: ciudad,
-                age: edad
-            }
-        );
-        alert("datos enviados")
+        onValue(ref(database, 'Calderon'), (snapshot) => {
+            const listaRegistros = document.getElementById("lista-registros");
+            listaRegistros.innerHTML = ""; // Limpiar lista antes de actualizar
 
-        // Limpiar los campos después de agregar un nuevo registro
-        document.getElementById("nombre").value = "";
-        document.getElementById("cedula").value = "";
-        document.getElementById("celular").value = "";
-        document.getElementById("ciudad").value = "";
-        document.getElementById("edad").value = "";
-    }
-    // Obtener y mostrar registros existentes
-    onValue(ref(database, 'Calderon'), (snapshot) => {
-        listaRegistros.innerHTML = ""; // Limpiar lista antes de actualizar
+            snapshot.forEach((childSnapshot) => {
+                const key = childSnapshot.key;
+                const registro = childSnapshot.val();
 
-        snapshot.forEach((childSnapshot) => {
-            const registro = childSnapshot.val();
-            const li = document.createElement("li");
-            li.textContent = `${registro.name} - Cédula: ${registro.cedula} - Celular: ${registro.celular} - Ciudad: ${registro.ciudad} - Edad: ${registro.age}`;
-            listaRegistros.appendChild(li);
+                const tr = document.createElement("tr");
 
-            // Agregar botones de eliminar y editar a cada elemento de la lista
-            const btnEliminar = document.createElement("button");
-            btnEliminar.textContent = "Eliminar";
-            btnEliminar.onclick = () => eliminarRegistro(childSnapshot.key);
-            li.appendChild(btnEliminar);
+                // Añadir celdas con datos
+                const tdNombre = document.createElement("td");
+                tdNombre.textContent = registro.nombre;
+                tr.appendChild(tdNombre);
 
-            const btnEditar = document.createElement("button");
-            btnEditar.textContent = "Editar";
-            btnEditar.onclick = () => editarRegistro(childSnapshot.key, registro);
-            li.appendChild(btnEditar);
+                const tdApellido = document.createElement("td");
+                tdApellido.textContent = registro.apellido;
+                tr.appendChild(tdApellido);
+
+                const tdEdad = document.createElement("td");
+                tdEdad.textContent = registro.edad;
+                tr.appendChild(tdEdad);
+
+                const tdCedula = document.createElement("td");
+                tdCedula.textContent = registro.cedula;
+                tr.appendChild(tdCedula);
+
+                const tdCelular = document.createElement("td");
+                tdCelular.textContent = registro.celular;
+                tr.appendChild(tdCelular);
+
+                // Añadir celda de acciones con botones de eliminar y editar
+                const tdAcciones = document.createElement("td");
+                const btnEliminar = document.createElement("button");
+                btnEliminar.textContent = "Eliminar";
+                btnEliminar.className = "btn btn-danger";
+                btnEliminar.onclick = () => eliminarRegistro(key);
+                tdAcciones.appendChild(btnEliminar);
+
+                const btnEditar = document.createElement("button");
+                btnEditar.textContent = "Editar";
+                btnEditar.className = "btn btn-primary ml-2";
+                btnEditar.onclick = () => editarRegistro(key, registro);
+                tdAcciones.appendChild(btnEditar);
+
+                tr.appendChild(tdAcciones);
+
+                listaRegistros.appendChild(tr);
+            });
         });
-    });
-
-    window.eliminarRegistro = function (key) {
-        remove(ref(database, `Calderon/${key}`));
-    }
-
-    window.editarRegistro = function (key, registro) {
-        const nuevoNombre = prompt("Nuevo nombre:", registro.name);
-        const nuevaCedula = prompt("Nueva cédula:", registro.cedula);
-        const nuevoCelular = prompt("Nuevo celular:", registro.celular);
-        const nuevaCiudad = prompt("Nueva ciudad:", registro.ciudad);
-        const nuevaEdad = prompt("Nueva edad:", registro.age);
-
-        update(ref(database, `Calderon/${key}`), {
-            name: nuevoNombre,
-            cedula: nuevaCedula,
-            celular: nuevoCelular,
-            ciudad: nuevaCiudad,
-            age: nuevaEdad
-        });
-    }
-</script>
-
+    </script>
 </body>
 </html>
